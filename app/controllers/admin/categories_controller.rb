@@ -1,6 +1,6 @@
 class Admin::CategoriesController < AdminController
     before_action :set_category, only: %i[ show edit update destroy ]
-    before_action :check_book, only: %i[destroy]
+
     # GET /categories or /categories.json
     def index
       @categories = Category.all
@@ -45,7 +45,7 @@ class Admin::CategoriesController < AdminController
     # DELETE /categories/1 or /categories/1.json
     def destroy
       respond_to do |format|
-        if @category.destroy
+        if @category.destroy?
         format.html { redirect_to admin_categories_path, notice: "Category was successfully destroyed." }
         end
       end
@@ -55,15 +55,6 @@ class Admin::CategoriesController < AdminController
       # Use callbacks to share common setup or constraints between actions.
     def set_category
      @category = Category.find(params[:id])
-    end
-
-    def check_book
-      @category = Category.find(params[:id])
-      respond_to do |format|
-      if @category.books.present?
-          format.html {redirect_to admin_categories_path, notice: "This category contains some books"}
-        end 
-      end
     end
   
       # Only allow a list of trusted parameters through.
